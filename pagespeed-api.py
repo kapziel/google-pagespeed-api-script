@@ -12,7 +12,7 @@ with open('pagespeed.txt') as pagespeedurls:
 	content = [line.rstrip('\n') for line in content]
 
 	columnTitleRow = "URL, First Contentful Paint, First Interactive," \
-					 "Speed Index,First Meaningful Paint\n"
+					 "Speed Index,First Meaningful Paint, First CPU Idle\n"
 	file.write(columnTitleRow)
 	global j
 
@@ -50,11 +50,16 @@ with open('pagespeed.txt') as pagespeedurls:
 					'displayValue']
 			FMP = f'First Meaningful Paint ~ {str(urlfmp)}'
 			FMP2 = str(urlfmp)
+			urlfci = \
+				final['lighthouseResult']['audits']['first-cpu-idle'][
+					'displayValue']
+			FCI = f'First CPU Idle ~ {str(urlfci)}'
+			FCI2 = str(urlfci)
 		except KeyError:
 			print(f'<KeyError> One or more keys not found {line}.')
 
 		try:
-			row = f'{ID2},{FCP2},{FI2},{SP2},{FMP2}\n'
+			row = f'{ID2},{FCP2},{FI2},{SP2},{FMP2},{FCI2}\n'
 			file.write(row)
 		except NameError:
 			print(f'<NameError> Failing because of KeyError {line}.')
@@ -67,6 +72,7 @@ with open('pagespeed.txt') as pagespeedurls:
 			print(FI)
 			print(SP)
 			print(FMP)
+			print(FCI)
 		except NameError:
 			print(f'<NameError> Failing because of KeyError {line}.')
 
