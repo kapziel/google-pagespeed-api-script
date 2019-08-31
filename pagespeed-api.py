@@ -42,7 +42,6 @@ with open('pagespeed.txt') as pagespeedurls:
 		r = requests.get(x)
 		final = r.json()
 		j = final
-		print(final)
 
 		try:
 			urlid = final['id']
