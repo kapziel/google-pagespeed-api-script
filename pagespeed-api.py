@@ -1,5 +1,21 @@
 import requests
 
+def load_from_storage():
+	try:
+		with open('api_key.txt') as api_key:
+			token = api_key.read().splitlines()
+			token = [x.strip() for x in token]
+			token = token.__str__().strip('[]')
+			token = token.__str__().strip('\'')
+			return token
+	except FileNotFoundError:
+		print(f'No API key found, continuing without..')
+		pass
+	return None
+
+
+token = load_from_storage()
+
 # Documentation: https://developers.google.com/speed/docs/insights/v5/get-started
 
 # JSON paths: https://developers.google.com/speed/docs/insights/v4/reference/pagespeedapi/runpagespeed
@@ -14,12 +30,14 @@ with open('pagespeed.txt') as pagespeedurls:
 	columnTitleRow = "URL, First Contentful Paint, First Interactive," \
 					 "Speed Index,First Meaningful Paint, First CPU Idle\n"
 	file.write(columnTitleRow)
-	global j
 
 	# This is the google pagespeed api url structure, using for loop to insert each url in .txt file
 	for line in content:
 		# If no "strategy" parameter is included, the query by default returns desktop data.
-		x = f'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={line}&strategy=mobile'
+		if token is not None:
+			x = f'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={line}&strategy=mobile&key={token}'
+		else:
+			x = f'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={line}&strategy=mobile'
 		print(f'Requesting {x}...')
 		r = requests.get(x)
 		final = r.json()
