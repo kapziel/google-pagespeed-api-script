@@ -13,3 +13,11 @@
  - First CPU Idle
  - Time to interactive
  
+### Requires
+
+- Requests
+
+
+### Note
+
+.gitignore hides api token file, this is loaded in via a .txt file. If no files exists `None` is used and script will contine without. To use in production (multiple calls / sec) an api token will be required.
